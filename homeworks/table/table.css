@@ -1,0 +1,43 @@
+table {
+    border: 1px solid;
+}
+
+tr {
+    border: 1px solid;
+}
+
+td {
+    border: 1px solid;
+}
+
+.triangle {
+    text-align: center;
+}
+
+small {
+    margin: 0 auto;
+}
+
+p {
+    text-align: center;
+}
+
+.line {
+    text-align: left;
+}
+
+.top {
+    height: 80px;
+}
+
+.bottom {
+    height: 17px;
+}
+
+.center {
+    text-align: center;
+}
+
+.float {
+    float: left;
+}
