@@ -72,6 +72,10 @@ input[type="text"]:hover {
     background-color: #4d93bc;
 }
 
+::placeholder { /* Most modern browsers support this now. */
+    color: #ffffff;
+}
+
 .left-block {
     margin: 1px -8px 0px -8px;
     width: 300px;
