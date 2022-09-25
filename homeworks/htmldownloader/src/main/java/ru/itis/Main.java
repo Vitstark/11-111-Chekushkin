@@ -1,27 +1,28 @@
 package ru.itis;
 
-import ru.itis.util.HttpClientMain;
+import ru.itis.http.FileLoader;
+import ru.itis.http.HtmlSourcesReplacer;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class Main {
-    static final String charset = java.nio.charset.StandardCharsets.UTF_8.name();
+
+    private static final String charset = java.nio.charset.StandardCharsets.UTF_8.name();
+    private static final String baseUrl = "https://stackoverflow.com/questions/73845862/having-trouble-with-comparing-datetimes-when-there-are-db-golang-and-unix-vers";
 
     public static void main(String[] args) {
-        //example get request for
-        HttpClientMain httpClient = new HttpClientMain();
-        String baseUrl = "https://yandex.ru/search/";
-        String query = encodeTextQuery("text=%s", "итис кфу");
-        httpClient.loadPageToFile(baseUrl, query, "a.html");
+        FileLoader fileLoader = new FileLoader("html");
+        fileLoader.loadToFile(baseUrl, "a.html");
 
-        //example download image
-        httpClient.loadImageToRandomFile("https://otvet.imgsmail.ru/download/256116852_cfd74eaf0366a5b037913006001d11f6.png");
+        HtmlSourcesReplacer sourcesReplacer = new HtmlSourcesReplacer("html/a.html");
+        sourcesReplacer.sourcesReplace("png");
+        sourcesReplacer.sourcesReplace("jpg");
     }
 
     private static String encodeTextQuery(String query, String param) {
         try {
-            return "text=" + URLEncoder.encode(param, charset);
-//            return String.format(query, URLEncoder.encode(param, charset));
+            return String.format(query, URLEncoder.encode(param, charset));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalArgumentException(e);
         }
