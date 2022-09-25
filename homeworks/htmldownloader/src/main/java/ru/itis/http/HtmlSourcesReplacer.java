@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HtmlSourcesReplacer {
-    private static final String urlPattern = "(https|http)://[A-Za-z\\.]+\\.(ru|net|ua|com)\\S*\\.%s(\\?\\S*^\")?";
+    private static final String urlPattern = "(https|http)://[A-Za-z\\.]+\\.(ru|net|ua|com)\\S*\\.%s(\\?(\\S)*)?";
 
     private final Path htmlPath;
 
@@ -19,29 +19,29 @@ public class HtmlSourcesReplacer {
         this.htmlPath = Path.of(htmlPath);
     }
 
-    public void sourcesReplace(final String suffix) {
+    public void replaceSources(final String suffix) {
         String html = getHtmlAsString();
-        String targetDir = htmlPath.getParent().toString() + '/' + suffix;
+        String changedHtml = downloadFilesAndReplaceSources(html, suffix);
+        rewriteHtml(changedHtml);
+    }
 
-        FileLoader fileLoader = new FileLoader(targetDir);
-        NameGeneratorFromImageUrl nameGenerator = new NameGeneratorFromImageUrl();
+    private String downloadFilesAndReplaceSources(String html, String suffix) {
+        String targetDir = htmlPath.getParent().resolve(suffix).toString();
 
         Pattern pattern = Pattern.compile(String.format(urlPattern, suffix));
         Matcher matcher = pattern.matcher(html);
 
-        String replacedHtml = matcher.replaceAll((matchResult) -> {
-            String imageName = nameGenerator.generateImageName(matcher.group());
-            System.out.println(matcher.group());
-            fileLoader.loadToFile(matcher.group(), imageName);
+        String changedHtml = matcher.replaceAll((matchResult) -> {
+            String url = matchResult.group();
+            System.out.println(url);
+            // url = url.substring(1, url.length() - 1);
+            String imageName = new NameGeneratorFromImageUrl().generateImageName(url);
+            FileLoader fileLoader = new FileLoader(targetDir, imageName);
+            fileLoader.loadToFile(url);
             return Path.of(suffix, imageName).toString();
         });
 
-        try {
-            PrintStream printStream = new PrintStream(htmlPath.toString());
-            printStream.print(replacedHtml);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return changedHtml;
     }
 
     private String getHtmlAsString() {
@@ -52,5 +52,14 @@ public class HtmlSourcesReplacer {
             throw new RuntimeException(e);
         }
         return htmlAsString;
+    }
+
+    private void rewriteHtml(String newHtml) {
+        try {
+            PrintStream printStream = new PrintStream(htmlPath.toString());
+            printStream.print(newHtml);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package ru.itis;
 
-import ru.itis.http.FileLoader;
-import ru.itis.http.HtmlSourcesReplacer;
+import ru.itis.http.HtmlDownloader;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -9,15 +8,11 @@ import java.net.URLEncoder;
 public class Main {
 
     private static final String charset = java.nio.charset.StandardCharsets.UTF_8.name();
-    private static final String baseUrl = "https://stackoverflow.com/questions/73845862/having-trouble-with-comparing-datetimes-when-there-are-db-golang-and-unix-vers";
+    private static final String url = "https://hh.ru";
 
     public static void main(String[] args) {
-        FileLoader fileLoader = new FileLoader("html");
-        fileLoader.loadToFile(baseUrl, "a.html");
-
-        HtmlSourcesReplacer sourcesReplacer = new HtmlSourcesReplacer("html/a.html");
-        sourcesReplacer.sourcesReplace("png");
-        sourcesReplacer.sourcesReplace("jpg");
+        HtmlDownloader downloader = new HtmlDownloader("jpg", "png", "svg");
+        downloader.loadPage(url, "html", "a.html");
     }
 
     private static String encodeTextQuery(String query, String param) {

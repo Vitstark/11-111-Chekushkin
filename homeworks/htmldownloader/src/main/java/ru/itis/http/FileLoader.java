@@ -13,19 +13,21 @@ import java.nio.file.Path;
 public class FileLoader {
 
     private String targetDir;
+    private String fileName;
 
-    public FileLoader(String targetDir) {
+    public FileLoader(String targetDir, String fileName) {
         this.targetDir = targetDir;
+        this.fileName = fileName;
+
         try {
-            Files.createDirectory(Path.of(targetDir));
+            Files.createDirectories(Path.of(targetDir));
         }catch (FileAlreadyExistsException e) {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void loadToFile(final String url,
-                           final String fileName) {
+    public void loadToFile(final String url) {
         URLConnection connection = null;
         try {
             //прокинули запрос
@@ -33,7 +35,7 @@ public class FileLoader {
             //возвращается обратно страница (содержимое)
             InputStream response = connection.getInputStream();
             //считываем содержимое в файл
-            writeToFile(response, Path.of(targetDir, fileName).toString());
+            writeToFile(response);
             response.close();
         } catch (IOException e) {
             throw new IllegalStateException(e);
@@ -41,8 +43,8 @@ public class FileLoader {
     }
 
     //todo - показать пример с Closeable
-    private void writeToFile(InputStream response, String fileName) throws IOException {
-        try (OutputStream outStream = new FileOutputStream(fileName)) {
+    private void writeToFile(InputStream response) throws IOException {
+        try (OutputStream outStream = new FileOutputStream(Path.of(targetDir, fileName).toFile())) {
             byte[] buffer = new byte[8 * 1024];
             int bytesRead;
             while ((bytesRead = response.read(buffer)) != -1) {
