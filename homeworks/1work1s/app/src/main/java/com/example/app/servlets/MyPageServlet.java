@@ -15,14 +15,9 @@ public class MyPageServlet extends HttpServlet {
         PeopleService peopleService = (PeopleService) getServletContext().getAttribute("peopleService");
 
         Long id = (Long) request.getSession().getAttribute("id");
-        Person person = peopleService.findById(id).get();
+        Person person = peopleService.findById(id);
 
         request.setAttribute("person", person);
         getServletContext().getRequestDispatcher("/WEB-INF/views/mypage.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }

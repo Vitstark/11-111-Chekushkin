@@ -87,7 +87,7 @@ public class TicketRepositoryJdbcTemplateImpl implements TicketRepository {
 
 	@Override
 	public List<Ticket> findTicketsByPersonId(Long personId) {
-		return jdbcTemplate.query(SQL_FIND_BY_PRESENTATION_ID,
+		return jdbcTemplate.query(SQL_FIND_BY_OWNER_ID,
 			Map.of("owner_id", personId), ticketMapper);
 	}
 

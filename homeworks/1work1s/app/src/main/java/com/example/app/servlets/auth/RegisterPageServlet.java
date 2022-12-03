@@ -50,7 +50,7 @@ public class RegisterPageServlet extends HttpServlet {
         peopleService.save(newPerson);
 
         request.getSession().setAttribute("id", newPerson.getId());
-        response.sendRedirect("/mypage");
+        response.sendRedirect(request.getContextPath() + "/mypage");
     }
 
     private boolean isCorrectPerson(Person person, HttpServletRequest req) {

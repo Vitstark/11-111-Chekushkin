@@ -33,7 +33,7 @@ public class ChangePersonServlet extends HttpServlet {
 
         PeopleService peopleService = (PeopleService) getServletContext().getAttribute("peopleService");
         Long id = (Long) request.getSession().getAttribute("id");
-        Person person = peopleService.findById(id).get();
+        Person person = peopleService.findById(id);
 
         if (!(newFirstName == null || newFirstName.isBlank())) {
             person.setFirstName(newFirstName);

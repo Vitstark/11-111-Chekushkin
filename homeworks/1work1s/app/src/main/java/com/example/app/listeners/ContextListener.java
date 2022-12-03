@@ -21,7 +21,9 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        DataSource dataSource = initDataSource(sce.getServletContext().getResourceAsStream(DB_PROPERTIES_PATH));
+        DataSource dataSource = initDataSource(sce.getServletContext()
+            .getResourceAsStream(DB_PROPERTIES_PATH));
+
         PeopleRepository peopleRepository = new PeopleRepositoryJdbcImpl(dataSource);
         ConcertRepository concertRepository =
             new ConcertRepositoryJdbcTemplateImpl(dataSource);
