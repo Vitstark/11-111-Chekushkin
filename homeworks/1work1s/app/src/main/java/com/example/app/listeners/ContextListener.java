@@ -1,8 +1,7 @@
 package com.example.app.listeners;
 
-import com.example.app.repositories.PeopleRepository;
-import com.example.app.repositories.PeopleRepositoryJdbcImpl;
-import com.example.app.service.PeopleServiceImpl;
+import com.example.app.repositories.*;
+import com.example.app.service.*;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -24,11 +23,28 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         DataSource dataSource = initDataSource(sce.getServletContext().getResourceAsStream(DB_PROPERTIES_PATH));
         PeopleRepository peopleRepository = new PeopleRepositoryJdbcImpl(dataSource);
-        PeopleServiceImpl peopleService = new PeopleServiceImpl(peopleRepository, new PasswordHashCodeEncoder());
+        ConcertRepository concertRepository =
+            new ConcertRepositoryJdbcTemplateImpl(dataSource);
+        PresentationRepository presentationRepository =
+            new PresentationRepositoryJdbcTemplateImpl(dataSource);
+        TicketRepository ticketRepository =
+            new TicketRepositoryJdbcTemplateImpl(dataSource);
+
+        PeopleServiceImpl peopleService = new PeopleServiceImpl(peopleRepository,
+            ticketRepository, new PasswordHashCodeEncoder());
+        ConcertService concertService = new ConcertServiceImpl(concertRepository,
+            presentationRepository);
+        PresentationService presentationService = new PresentationServiceImpl(
+            presentationRepository, ticketRepository, concertRepository);
+        TicketService ticketService = new TicketServiceImpl(ticketRepository,
+            presentationRepository, peopleRepository);
 
         EmailValidator emailValidator = new EmailValidator(peopleService);
 
         sce.getServletContext().setAttribute("peopleService", peopleService);
+        sce.getServletContext().setAttribute("concertService", concertService);
+        sce.getServletContext().setAttribute("presentationService", presentationService);
+        sce.getServletContext().setAttribute("ticketService", ticketService);
         sce.getServletContext().setAttribute("emailValidator", emailValidator);
     }
 

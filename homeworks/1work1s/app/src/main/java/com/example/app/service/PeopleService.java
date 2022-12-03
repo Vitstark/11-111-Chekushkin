@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface PeopleService {
     void save(Person person);
     List<Person> findAll();
-    Optional<Person> findById(Long id);
+    Person findById(Long id);
     Optional<Person> findByEmail(String email);
     void update(Person person);
     void deleteById(Long id);

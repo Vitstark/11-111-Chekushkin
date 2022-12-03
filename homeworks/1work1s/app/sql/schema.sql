@@ -26,12 +26,12 @@ CREATE TABLE presentation
     concert_id        bigint references concert (id)
 );
 
-CREATE TABLE ticket
+create table ticket
 (
-    presentation_id bigint references presentation(id),
-    row int check (row > 0),
-    place int check (place > 0),
-    owner_id bigint references person(id),
+    presentation_id bigint  not nullreferences presentation,
+    row integer not null check (row > 0),
+    place integer not null check (place > 0),
+    owner_id bigint references person,
 
-    CONSTRAINT pk_ticket PRIMARY KEY (presentation_id, row, place)
+    constraint pk_ticket primary key (presentation_id, row, place)
 );

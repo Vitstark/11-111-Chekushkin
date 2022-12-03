@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
+import javax.persistence.Transient;
 
 @Data
 @Builder
@@ -15,4 +17,7 @@ public class Person {
     private String lastName;
     private String email;
     private String password;
+
+    @Transient
+    private List<Ticket> tickets;
 }
