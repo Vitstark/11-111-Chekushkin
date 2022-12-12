@@ -15,6 +15,7 @@ public class PresentationMapper implements RowMapper<Presentation> {
 		return Presentation.builder()
 			.id(rs.getLong("id"))
 			.presentationTime(rs.getTimestamp("presentation_time"))
+			.concertId(rs.getLong("concert_id"))
 			.build();
 	}
 }

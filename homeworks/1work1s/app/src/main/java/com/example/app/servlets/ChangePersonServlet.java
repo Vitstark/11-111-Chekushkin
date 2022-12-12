@@ -28,18 +28,14 @@ public class ChangePersonServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String newFirstName = request.getParameter("firstName");
-        String newLastName = request.getParameter("lastName");
+        String newName = request.getParameter("name");
 
         PeopleService peopleService = (PeopleService) getServletContext().getAttribute("peopleService");
         Long id = (Long) request.getSession().getAttribute("id");
         Person person = peopleService.findById(id);
 
-        if (!(newFirstName == null || newFirstName.isBlank())) {
-            person.setFirstName(newFirstName);
-        }
-        if (!(newLastName == null || newLastName.isBlank())) {
-            person.setLastName(newLastName);
+        if (!(newName == null || newName.isBlank())) {
+            person.setName(newName);
         }
 
         if (!isCorrectNames(person, request)) {
@@ -54,8 +50,7 @@ public class ChangePersonServlet extends HttpServlet {
 
     private boolean isCorrectNames(Person person, HttpServletRequest req) {
         boolean isCorrect = true;
-        isCorrect = isCorrect & isCorrectName(person.getFirstName(), "firstNameError", req);
-        isCorrect = isCorrect & isCorrectName(person.getLastName(), "lastNameError", req);
+        isCorrect = isCorrect & isCorrectName(person.getName(), "nameError", req);
         return isCorrect;
     }
 

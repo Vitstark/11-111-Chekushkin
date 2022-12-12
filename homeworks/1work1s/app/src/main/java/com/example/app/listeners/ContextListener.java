@@ -7,6 +7,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -17,7 +18,8 @@ import com.example.app.util.validators.EmailValidator;
 
 @WebListener
 public class ContextListener implements ServletContextListener {
-    private static String DB_PROPERTIES_PATH = "/WEB-INF/db.properties";
+    private static final String DB_PROPERTIES_PATH = "/WEB-INF/db.properties";
+    private static final String IMAGE_PATH = "/images";
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -35,7 +37,8 @@ public class ContextListener implements ServletContextListener {
         PeopleServiceImpl peopleService = new PeopleServiceImpl(peopleRepository,
             ticketRepository, new PasswordHashCodeEncoder());
         ConcertService concertService = new ConcertServiceImpl(concertRepository,
-            presentationRepository);
+            presentationRepository, sce.getServletContext()
+                                        .getRealPath("") + File.pathSeparator + IMAGE_PATH);
         PresentationService presentationService = new PresentationServiceImpl(
             presentationRepository, ticketRepository, concertRepository);
         TicketService ticketService = new TicketServiceImpl(ticketRepository,

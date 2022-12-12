@@ -1,6 +1,7 @@
 package com.example.app.servlets.auth;
 
 import com.example.app.models.Person;
+import com.example.app.models.Role;
 import com.example.app.service.PeopleService;
 import com.example.app.util.exceptions.ValidationException;
 import com.example.app.util.validators.NameValidator;
@@ -36,9 +37,9 @@ public class RegisterPageServlet extends HttpServlet {
 
         Person newPerson = Person.builder()
                 .email(request.getParameter("email"))
-                .firstName(request.getParameter("firstName"))
-                .lastName(request.getParameter("lastName"))
+                .name(request.getParameter("name"))
                 .password(request.getParameter("password"))
+                .role(Role.USER)
                 .build();
 
         if (!isCorrectPerson(newPerson, request)) {
@@ -56,8 +57,7 @@ public class RegisterPageServlet extends HttpServlet {
     private boolean isCorrectPerson(Person person, HttpServletRequest req) {
         boolean isCorrect = true;
         isCorrect = isCorrect & isCorrectField(emailValidator, person.getEmail(), "emailError", req);
-        isCorrect = isCorrect & isCorrectField(nameValidator, person.getFirstName(), "firstNameError", req);
-        isCorrect = isCorrect & isCorrectField(nameValidator, person.getLastName(), "lastNameError", req);
+        isCorrect = isCorrect & isCorrectField(nameValidator, person.getName(), "nameError", req);
         isCorrect = isCorrect & isCorrectField(passwordValidator, person.getPassword(), "passwordError", req);
         return isCorrect;
     }

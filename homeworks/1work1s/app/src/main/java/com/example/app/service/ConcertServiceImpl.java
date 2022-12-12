@@ -1,10 +1,16 @@
 package com.example.app.service;
 
+import java.nio.file.Path;
 import java.util.List;
+
+import javax.servlet.http.Part;
 
 import com.example.app.models.Concert;
 import com.example.app.repositories.ConcertRepository;
+import com.example.app.repositories.FileSaver;
+import com.example.app.repositories.FileSaverImpl;
 import com.example.app.repositories.PresentationRepository;
+import com.example.app.util.NameGeneratorFromImageName;
 import com.example.app.util.exceptions.NotFoundException;
 
 /**
@@ -13,15 +19,24 @@ import com.example.app.util.exceptions.NotFoundException;
 public class ConcertServiceImpl implements ConcertService {
 	private final ConcertRepository concertRepository;
 	private final PresentationRepository presentationRepository;
+	private final FileSaver fileSaver;
+	private final NameGeneratorFromImageName imageNameGenerator;
 
 	public ConcertServiceImpl(ConcertRepository concertRepository,
-		PresentationRepository presentationRepository) {
+		PresentationRepository presentationRepository,
+		String path) {
 		this.concertRepository = concertRepository;
 		this.presentationRepository = presentationRepository;
+		this.fileSaver = new FileSaverImpl(path);
+		this.imageNameGenerator = new NameGeneratorFromImageName();
 	}
 
 	@Override
 	public void save(Concert concert) {
+		String imageName = imageNameGenerator.generateImageName(concert.getPart().getName());
+		fileSaver.save(concert.getPart(), imageName);
+		concert.setImagePath(Path.of("image", imageName));
+
 		concertRepository.save(concert);
 	}
 

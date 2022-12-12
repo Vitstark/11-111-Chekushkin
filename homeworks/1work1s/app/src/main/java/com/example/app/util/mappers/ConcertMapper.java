@@ -1,5 +1,6 @@
 package com.example.app.util.mappers;
 
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,7 +16,9 @@ public class ConcertMapper implements RowMapper<Concert> {
 		return Concert.builder()
 			.id(rs.getLong("id"))
 			.title(rs.getString("title"))
+			.author(rs.getString("author"))
 			.description(rs.getString("description"))
+			.imagePath(Path.of(rs.getString("image_path")))
 			.build();
 	}
 }

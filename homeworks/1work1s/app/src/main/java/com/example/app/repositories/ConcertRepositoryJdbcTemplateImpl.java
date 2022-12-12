@@ -24,7 +24,8 @@ public class ConcertRepositoryJdbcTemplateImpl implements ConcertRepository {
 	private static final String SQL_FIND_BY_ID = "select * from concert where id = :id";
 	//language=SQL
 	private static final String SQL_UPDATE_CONCERTO = "UPDATE concert SET title = :title, "
-													  + "description = :description where id = :id";
+			+ "description = :description, author = :author, image_path = :image_path "
+			+ "where id = :id";
 
 	private static final RowMapper<Concert> concertoMapper = new ConcertMapper();
 

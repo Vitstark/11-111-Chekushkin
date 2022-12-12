@@ -18,21 +18,11 @@
     </div>
 
     <div>
-        <label for="firstName">Enter your first name</label>
-        <input type="text" id="firstName" name="firstName">
-        <c:if test="${firstNameError != null}">
+        <label for="name">Enter your name</label>
+        <input type="text" id="name" name="name">
+        <c:if test="${nameError != null}">
             <div style="color:red">
-                <c:out value="${firstNameError}"></c:out>
-            </div>
-        </c:if>
-    </div>
-
-    <div>
-        <label for="lastName">Enter your last name</label>
-        <input type="text" id="lastName" name="lastName">
-        <c:if test="${lastNameError != null}">
-            <div style="color:red">
-                <c:out value="${lastNameError}"></c:out>
+                <c:out value="${nameError}"></c:out>
             </div>
         </c:if>
     </div>

@@ -11,11 +11,7 @@
 </div>
 
 <div>
-  <c:out value="First name: ${person.getFirstName()}"></c:out>
-</div>
-
-<div>
-  <c:out value="Last name: ${person.getLastName()}"></c:out>
+  <c:out value="Name: ${person.getName()}"></c:out>
 </div>
 
 <a href="${pageContext.request.contextPath}/change_person">Update my data</a>

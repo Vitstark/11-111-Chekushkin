@@ -27,9 +27,9 @@ public class PeopleRepositoryJdbcImpl implements PeopleRepository {
             "select * from person where email = :email";
     //language=SQL
     private static final String SQL_UPDATE_PERSON =
-            "update person set first_name = :first_name, last_name = :last_name, " +
-                    "email = :email, pass = :pass " +
-                    "where id = :id";
+            "update person set name = :name, email = :email, "
+            + "pass = :pass, role = :role "
+            + "where id = :id";
 
     private static final RowMapper<Person> personMapper = new PeopleMapper();
 
@@ -43,10 +43,10 @@ public class PeopleRepositoryJdbcImpl implements PeopleRepository {
     public void save(Person person) {
         Map<String, Object> paramsAsMap = new HashMap<>();
 
+        paramsAsMap.put("name", person.getName());
         paramsAsMap.put("email", person.getEmail());
-        paramsAsMap.put("first_name", person.getFirstName());
-        paramsAsMap.put("last_name", person.getLastName());
         paramsAsMap.put("pass", person.getPassword());
+        paramsAsMap.put("role", person.getRole().name());
 
         SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate());
 
@@ -77,10 +77,10 @@ public class PeopleRepositoryJdbcImpl implements PeopleRepository {
         Map<String, Object> paramsAsMap = new HashMap<>();
 
         paramsAsMap.put("id", person.getId());
+        paramsAsMap.put("name", person.getName());
         paramsAsMap.put("email", person.getEmail());
-        paramsAsMap.put("first_name", person.getFirstName());
-        paramsAsMap.put("last_name", person.getLastName());
         paramsAsMap.put("pass", person.getPassword());
+        paramsAsMap.put("role", person.getRole().name());
 
         jdbcTemplate.update(SQL_UPDATE_PERSON, paramsAsMap);
     }

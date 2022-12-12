@@ -41,6 +41,10 @@ public class PresentationServiceImpl implements PresentationService{
 		return presentation;
 	}
 
+	public List<Presentation> findAllByConcertId(Long concertId) {
+		return presentationRepository.findByConcert(concertId);
+	}
+
 	@Override
 	public List<Presentation> findAllOrderByDate() {
 		return presentationRepository.findAll()

@@ -1,6 +1,7 @@
 package com.example.app.util.mappers;
 
 import com.example.app.models.Person;
+import com.example.app.models.Role;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -12,9 +13,9 @@ public class PeopleMapper implements RowMapper<Person> {
         return Person.builder()
                 .id(rs.getLong("id"))
                 .email(rs.getString("email"))
-                .firstName(rs.getString("first_name"))
-                .lastName(rs.getString("last_name"))
+                .name(rs.getString("name"))
                 .password(rs.getString("pass"))
+                .role(Role.valueOf(rs.getString("role")))
                 .build();
     }
 }

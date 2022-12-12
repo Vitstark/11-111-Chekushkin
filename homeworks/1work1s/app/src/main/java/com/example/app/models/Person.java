@@ -13,10 +13,10 @@ import javax.persistence.Transient;
 @AllArgsConstructor
 public class Person {
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String password;
+    private Role role;
 
     @Transient
     private List<Ticket> tickets;
