@@ -1,5 +1,7 @@
 package com.example.app.repositories;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,12 +26,20 @@ public class PresentationRepositoryJdbcTemplateImpl implements PresentationRepos
 	private static final String SQL_FIND_BY_ID = "select * from presentation where id = :id";
 	//language=SQL
 	private static final String SQL_UPDATE_PRESENTATION = "update presentation "
-				+ "set presentation_time = :presentation_time, concert_id = :concert_id "
+				+ "set time = :time, concert_id = :concert_id "
 				+ "where id = :id";
 	//language=SQL
 	private static final String SQL_DELETE_PRESENTATION = "delete from presentation where id = :id";
 	//language=SQL
-	private static final String SQL_FIND_BY_CONCERTO_ID = "select * from presentation where concert_id = :concert_id";
+	private static final String SQL_FIND_BY_CONCERTO_ID = "select * from presentation "
+														  + "where concert_id = :concert_id";
+	//language=SQL
+	private static final String SQL_FIND_BY_CONCERT_AND_DATE = "select * "
+			+ "from presentation where concert_id = :concert_id "
+			+ "and extract(year from time) = :year "
+			+ "and extract(month from time) = :month "
+			+ "and extract(day from time) = :day "
+			+ "order by time";
 
 	private static final RowMapper<Presentation> presentationMapper = new PresentationMapper();
 
@@ -42,10 +52,11 @@ public class PresentationRepositoryJdbcTemplateImpl implements PresentationRepos
 	@Override
 	public void save(Presentation presentation) {
 		Map<String, Object> paramsMap = Map.of(
-			"presentation_time", presentation.getPresentationTime(),
+			"time", presentation.getTime(),
 			"concert_id", presentation.getConcertId());
 
-		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate());
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(
+			jdbcTemplate.getJdbcTemplate());
 
 		Long id = simpleJdbcInsert.withTableName("presentation")
 			.usingGeneratedKeyColumns("id")
@@ -65,7 +76,8 @@ public class PresentationRepositoryJdbcTemplateImpl implements PresentationRepos
 
 		try {
 			presentationOptional = Optional.ofNullable(
-				jdbcTemplate.queryForObject(SQL_FIND_BY_ID, Map.of("id", id), presentationMapper));
+				jdbcTemplate.queryForObject(SQL_FIND_BY_ID,
+					Map.of("id", id), presentationMapper));
 		} catch (EmptyResultDataAccessException e) {
 			presentationOptional = Optional.empty();
 		}
@@ -77,7 +89,7 @@ public class PresentationRepositoryJdbcTemplateImpl implements PresentationRepos
 	public void update(Presentation presentation) {
 		Map<String, Object> paramsMap = Map.of(
 			"id", presentation.getId(),
-			"presentation_time", presentation.getPresentationTime(),
+			"time", presentation.getTime(),
 			"concert_id", presentation.getConcertId());
 
 		jdbcTemplate.update(SQL_UPDATE_PRESENTATION, paramsMap);
@@ -85,12 +97,24 @@ public class PresentationRepositoryJdbcTemplateImpl implements PresentationRepos
 
 	@Override
 	public void deleteById(Long id) {
-		jdbcTemplate.update(SQL_DELETE_PRESENTATION, Map.of("id", id));
+		jdbcTemplate.update(SQL_DELETE_PRESENTATION,
+			Map.of("id", id));
 	}
 
 	@Override
 	public List<Presentation> findByConcert(Long concertId) {
 		return jdbcTemplate.query(SQL_FIND_BY_CONCERTO_ID,
 			Map.of("concert_id", concertId), presentationMapper);
+	}
+
+	@Override
+	public List<Presentation> findByConcertAndDateOrderByDate(Long concertId, LocalDate date) {
+		Map<String, Object> params = Map.of("concert_id", concertId,
+			"day", date.getDayOfMonth(),
+			"month", date.getMonth().getValue(),
+			"year", date.getYear());
+
+		return jdbcTemplate.query(SQL_FIND_BY_CONCERT_AND_DATE,
+			params, presentationMapper);
 	}
 }

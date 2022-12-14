@@ -7,6 +7,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,23 +17,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.app.models.Presentation;
+import com.example.app.models.Ticket;
 import com.example.app.service.PresentationService;
+import com.example.app.service.TicketService;
 
-@WebServlet("/presentations")
+@WebServlet("/presentation")
 public class PresentationsServlet extends HttpServlet {
     private PresentationService presentationService;
+	private TicketService ticketService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         presentationService = (PresentationService) config.getServletContext()
             .getAttribute("presentationService");
+		ticketService = (TicketService) config.getServletContext().getAttribute("ticketService");
     }
 
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
         Long id = Long.valueOf(request.getParameter("id"));
+		String rowParameter = request.getParameter("row");
+		Integer row;
+
+		if (rowParameter == null) {
+			row = 1;
+		} else {
+			row = Integer.parseInt(rowParameter);
+		}
+
+		List<Ticket> tickets = ticketService.findAllByPresentationIdAndRow(id, row);
+
         request.setAttribute("presentation", presentationService.findById(id));
+		request.setAttribute("tickets", tickets);
+		request.setAttribute("nextRow", ++row);
+		request.setAttribute("prevRow", --row);
 
         request.getServletContext()
             .getRequestDispatcher("/WEB-INF/views/presentation.jsp")
@@ -56,7 +75,7 @@ public class PresentationsServlet extends HttpServlet {
 
 		Presentation presentation = Presentation.builder()
 			.concertId(concertId)
-			.presentationTime(presentationTime)
+			.time(presentationTime)
 			.build();
 
 		presentationService.save(presentation);
@@ -87,7 +106,7 @@ public class PresentationsServlet extends HttpServlet {
 
 		Timestamp newPresentationTime = Timestamp.valueOf(
 			req.getParameter("presentationTime"));
-		presentation.setPresentationTime(newPresentationTime);
+		presentation.setTime(newPresentationTime);
 
 		presentationService.update(presentation);
     }

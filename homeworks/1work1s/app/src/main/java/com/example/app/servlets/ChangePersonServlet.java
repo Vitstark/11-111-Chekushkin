@@ -38,7 +38,7 @@ public class ChangePersonServlet extends HttpServlet {
             person.setName(newName);
         }
 
-        if (!isCorrectNames(person, request)) {
+        if (!isCorrectName(person.getName(), request)) {
             getServletContext().getRequestDispatcher("/WEB-INF/views/changePerson.jsp").forward(request, response);
             return;
         }
@@ -48,17 +48,11 @@ public class ChangePersonServlet extends HttpServlet {
         response.sendRedirect(getServletContext().getContextPath() + "/mypage");
     }
 
-    private boolean isCorrectNames(Person person, HttpServletRequest req) {
-        boolean isCorrect = true;
-        isCorrect = isCorrect & isCorrectName(person.getName(), "nameError", req);
-        return isCorrect;
-    }
-
-    private boolean isCorrectName(Object field, String errorName, HttpServletRequest req) {
+    private boolean isCorrectName(String nameField, HttpServletRequest req) {
         try {
-            nameValidator.validate(field);
+            nameValidator.validate(nameField);
         } catch (ValidationException e) {
-            req.setAttribute(errorName, e.getMessage());
+            req.setAttribute("nameError", e.getMessage());
             return false;
         }
         return true;

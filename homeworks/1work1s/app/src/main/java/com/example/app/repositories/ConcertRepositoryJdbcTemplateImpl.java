@@ -37,8 +37,11 @@ public class ConcertRepositoryJdbcTemplateImpl implements ConcertRepository {
 
 	@Override
 	public void save(Concert concerto) {
-		Map<String, Object> mapParams = Map.of("title", concerto.getTitle(),
-			"description", concerto.getDescription());
+		Map<String, Object> mapParams = Map.of(
+			"title", concerto.getTitle(),
+			"author", concerto.getAuthor(),
+			"description", concerto.getDescription(),
+			"image_path", concerto.getImagePath());
 
 		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate());
 
@@ -72,6 +75,7 @@ public class ConcertRepositoryJdbcTemplateImpl implements ConcertRepository {
 	public void update(Concert concerto) {
 		Map<String, Object> mapParams = Map.of("id", concerto.getId(),
 			"title", concerto.getTitle(),
+
 			"description", concerto.getDescription());
 
 

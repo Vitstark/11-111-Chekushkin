@@ -3,6 +3,7 @@ VALUES ('The Nutcracker', 'Pyotr Ilych Tchaikovsky', 'The Nutcracker is a two-ac
        ('The Sleeping Beauty', 'Pyotr Ilych Tchaikovsky', 'The Sleeping Beauty was the second of Tchaikovsky three ballet scores, based on the fairy tale by Charles Perrault. It was composed and orchestrated from October 1888 to August 1889, with minor revisions during stage rehearsals in the last three months of 1889.', 'images/sleeping_beauty.webp'),
         ('Swan Lake', 'Pyotr Ilych Tchaikovsky', 'Swan Lake was the first of Tchaikovskys ballet scores, composed between August 1875 and April 1876, with additions and revisions in February and April 1877. The ballets original title, as indicated on the manuscript score, was The Lake of Swans or Lake of the Swans, and its story derives from a German fairy tale.', 'images/swan_lake.jpg');
 
-INSERT INTO presentation(presentation_time, concert_id, hall)
-VALUES ('2022-12-06 12:00:00', 1, 'Carnegie Hall'),
-       ('2022-12-07 12:00:00', 1, 'Carnegie Hall')
+INSERT INTO presentation(concert_id, time)
+VALUES (1, '2022-12-14 14:00:00'),
+       (1, '2022-12-14 18:00:00'),
+       (1, '2022-12-15 15:00:00')

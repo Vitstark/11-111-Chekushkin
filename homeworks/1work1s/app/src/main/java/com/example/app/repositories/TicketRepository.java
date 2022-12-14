@@ -13,6 +13,7 @@ public interface TicketRepository {
 	Optional<Ticket> findTicketBy(Long presentationId, Integer place, Integer row);
 	List<Ticket> findTicketsByPresentationId(Long presentationId);
 	List<Ticket> findTicketsByPersonId(Long personId);
+	List<Ticket> findTicketsByPresentationIdAndByRowOrderByPlace(Long presentationId, Integer row);
 	void update(Ticket ticket);
 	void delete(Long presentationId, Integer row, Integer place);
 }

@@ -41,7 +41,16 @@
           </li>
         </c:if>
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+          <c:choose>
+            <c:when test="${person == null}">
+            <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+            </c:when>
+            <c:otherwise>
+              <a class="nav-link" href="${pageContext.request.contextPath}/mypage">${person.getName()}</a>
+            </c:otherwise>
+          </c:choose>
+
+          <if
         </li>
       </ul>
     </div>
@@ -57,7 +66,6 @@
       </div>
       <div class="col-lg-8 align-self-baseline">
         <p class="text-white-75 mb-5">Easy, Beauty and Fast!</p>
-        <a class="btn btn-primary btn-xl" href="#about">Find Out More</a>
       </div>
     </div>
   </div>

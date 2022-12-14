@@ -14,8 +14,8 @@ public class PresentationMapper implements RowMapper<Presentation> {
 	public Presentation mapRow(ResultSet rs, int rowNum) throws SQLException {
 		return Presentation.builder()
 			.id(rs.getLong("id"))
-			.presentationTime(rs.getTimestamp("presentation_time"))
 			.concertId(rs.getLong("concert_id"))
+			.time(rs.getTimestamp("time"))
 			.build();
 	}
 }

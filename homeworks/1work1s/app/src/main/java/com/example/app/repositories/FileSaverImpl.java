@@ -19,7 +19,7 @@ public class FileSaverImpl implements FileSaver {
 	@Override
 	public void save(Part part, String imageName) {
 		try {
-			part.write(path + File.pathSeparator + imageName);
+			part.write(path + '/' + imageName);
 		}
 		catch (IOException e) {
 			throw new FileNotSavedException(e);

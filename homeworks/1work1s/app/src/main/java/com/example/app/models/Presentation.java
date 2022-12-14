@@ -1,5 +1,6 @@
 package com.example.app.models;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +18,8 @@ import lombok.Data;
 @Data
 public class Presentation {
 	private Long id;
-	private Date presentationTime;
 	private Long concertId;
+	private Timestamp time;
 
 	@Transient
 	private Concert concert;

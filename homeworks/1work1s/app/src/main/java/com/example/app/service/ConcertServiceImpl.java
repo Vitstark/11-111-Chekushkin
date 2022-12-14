@@ -33,9 +33,9 @@ public class ConcertServiceImpl implements ConcertService {
 
 	@Override
 	public void save(Concert concert) {
-		String imageName = imageNameGenerator.generateImageName(concert.getPart().getName());
+		String imageName = imageNameGenerator.generateImageName(concert.getPart().getSubmittedFileName());
 		fileSaver.save(concert.getPart(), imageName);
-		concert.setImagePath(Path.of("image", imageName));
+		concert.setImagePath(Path.of("images", imageName));
 
 		concertRepository.save(concert);
 	}

@@ -49,7 +49,7 @@ public class ProcessLoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("id", personFromDB.get().getId());
 
-        response.sendRedirect(getServletContext().getContextPath() + "/mypage");
+        response.sendRedirect(getServletContext().getContextPath() + "/concerts");
     }
 
     private void forwardToLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

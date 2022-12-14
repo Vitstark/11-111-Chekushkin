@@ -1,6 +1,7 @@
 package com.example.app.service;
 
 import java.nio.file.attribute.UserPrincipal;
+import java.util.List;
 import java.util.Optional;
 
 import com.example.app.models.Person;
@@ -58,5 +59,11 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public void delete(Ticket ticket) {
 		deleteByPk(ticket.getPresentationId(), ticket.getRow(), ticket.getPlace());
+	}
+
+	@Override
+	public List<Ticket> findAllByPresentationIdAndRow(Long presentationId, Integer row) {
+		return ticketRepository.findTicketsByPresentationIdAndByRowOrderByPlace(
+			presentationId, row);
 	}
 }

@@ -13,4 +13,5 @@ public interface TicketService {
 	Ticket findByPk(Long presentationId, Integer row, Integer place);
 	void deleteByPk(Long presentationId, Integer row, Integer place);
 	void delete(Ticket ticket);
+	List<Ticket> findAllByPresentationIdAndRow(Long presentationId, Integer row);
 }

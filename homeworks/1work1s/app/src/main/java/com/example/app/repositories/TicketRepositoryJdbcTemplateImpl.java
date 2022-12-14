@@ -36,6 +36,10 @@ public class TicketRepositoryJdbcTemplateImpl implements TicketRepository {
 	private static final String SQL_DELETE_TICKET = "delete from ticket "
 													+ "where presentation_id = :presentation_id and "
 													+ "row = :row and place = :place";
+	//language=SQL
+	private static final String SQL_FIND_BY_PRESENTATION_AND_ROW =
+		"select * from ticket where presentation_id = :presentation_id and row = :row and owner_id is null "
+		+ "order by place";
 
 	private static final RowMapper<Ticket> ticketMapper = new TicketMapper();
 
@@ -53,14 +57,16 @@ public class TicketRepositoryJdbcTemplateImpl implements TicketRepository {
 			"place", ticket.getPlace(),
 			"owner_id", ticket.getOwnerId());
 
-		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate());
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate
+			.getJdbcTemplate());
 
 		simpleJdbcInsert.withTableName("ticket")
 			.execute(paramsMap);
 	}
 
 	@Override
-	public Optional<Ticket> findTicketBy(Long presentationId, Integer place, Integer row) {
+	public Optional<Ticket> findTicketBy(Long presentationId,
+		Integer place, Integer row) {
 		Optional<Ticket> ticketOptional;
 
 		Map<String, Object> paramsMap = Map.of(
@@ -110,6 +116,17 @@ public class TicketRepositoryJdbcTemplateImpl implements TicketRepository {
 			"place", place);
 
 		jdbcTemplate.update(SQL_DELETE_TICKET, paramsMap);
+	}
+
+	@Override
+	public List<Ticket> findTicketsByPresentationIdAndByRowOrderByPlace(
+		Long presentationId, Integer row) {
+		Map<String, Object> paramsMap = Map.of(
+			"presentation_id", presentationId,
+			"row", row);
+
+		return jdbcTemplate.query(SQL_FIND_BY_PRESENTATION_AND_ROW,
+			paramsMap, ticketMapper);
 	}
 }
 

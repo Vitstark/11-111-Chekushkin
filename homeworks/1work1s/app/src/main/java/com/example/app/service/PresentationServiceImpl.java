@@ -1,6 +1,8 @@
 package com.example.app.service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,21 +38,11 @@ public class PresentationServiceImpl implements PresentationService{
 			.orElseThrow(() -> new NotFoundException("Presentation not found!"));
 
 		presentation.setConcert(concertRepository.findById(presentation.getConcertId()).get());
-		presentation.setTickets(ticketRepository.findTicketsByPresentationId(presentation.getId()));
-
 		return presentation;
 	}
 
 	public List<Presentation> findAllByConcertId(Long concertId) {
 		return presentationRepository.findByConcert(concertId);
-	}
-
-	@Override
-	public List<Presentation> findAllOrderByDate() {
-		return presentationRepository.findAll()
-			.stream()
-			.sorted(Comparator.comparing(Presentation::getPresentationTime))
-			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -61,5 +53,9 @@ public class PresentationServiceImpl implements PresentationService{
 	@Override
 	public void delete(Long presentationId) {
 		presentationRepository.deleteById(presentationId);
+	}
+
+	public List<Presentation> findByConcertAndDateOrderByDate(Long concertId, LocalDate date) {
+		return presentationRepository.findByConcertAndDateOrderByDate(concertId, date);
 	}
 }

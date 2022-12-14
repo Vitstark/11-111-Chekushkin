@@ -51,7 +51,7 @@ public class RegisterPageServlet extends HttpServlet {
         peopleService.save(newPerson);
 
         request.getSession().setAttribute("id", newPerson.getId());
-        response.sendRedirect(request.getContextPath() + "/mypage");
+        response.sendRedirect(request.getContextPath() + "/concerts");
     }
 
     private boolean isCorrectPerson(Person person, HttpServletRequest req) {
