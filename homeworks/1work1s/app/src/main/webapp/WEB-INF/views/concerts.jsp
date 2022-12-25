@@ -49,8 +49,6 @@
               <a class="nav-link" href="${pageContext.request.contextPath}/mypage">${person.getName()}</a>
             </c:otherwise>
           </c:choose>
-
-          <if
         </li>
       </ul>
     </div>

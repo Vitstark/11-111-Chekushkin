@@ -46,14 +46,15 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ms-auto my-2 my-lg-0">
         <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/concerts">Concerts</a></li>
-        <c:if test="${isAdmin}">
-          <li class="nav-item">
-            <a class="nav-link" href="${pageContext.request.contextPath}/concerts/new">Add
-              Concert</a>
-          </li>
-        </c:if>
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+          <c:choose>
+            <c:when test="${person == null}">
+              <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+            </c:when>
+            <c:otherwise>
+              <a class="nav-link" href="${pageContext.request.contextPath}/mypage">${person.getName()}</a>
+            </c:otherwise>
+          </c:choose>
         </li>
       </ul>
     </div>
@@ -82,10 +83,10 @@
   <div class="card-body">
     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
       <div class="dataTable-top">
-        <c:if test="${prevRow > 1}">
+        <c:if test="${prevRow > 0}">
         <a href="${pageContext.servletContext.contextPath}/presentation?id=${presentation.getId()}&row=${prevRow}">Previous Row</a>
         </c:if>
-        <c:if test="${nextRow < 8}">
+        <c:if test="${nextRow < 9}">
         <a href="${pageContext.servletContext.contextPath}/presentation?id=${presentation.getId()}&row=${nextRow}">Next Row</a>
         </c:if>
       </div>

@@ -53,7 +53,14 @@
           </li>
         </c:if>
         <li class="nav-item">
-          <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+          <c:choose>
+            <c:when test="${person == null}">
+              <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+            </c:when>
+            <c:otherwise>
+              <a class="nav-link" href="${pageContext.request.contextPath}/mypage">${person.getName()}</a>
+            </c:otherwise>
+          </c:choose>
         </li>
       </ul>
     </div>

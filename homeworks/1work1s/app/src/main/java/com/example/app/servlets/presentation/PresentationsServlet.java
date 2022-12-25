@@ -16,8 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.app.models.Person;
 import com.example.app.models.Presentation;
+import com.example.app.models.Role;
 import com.example.app.models.Ticket;
+import com.example.app.service.PeopleService;
 import com.example.app.service.PresentationService;
 import com.example.app.service.TicketService;
 
@@ -25,17 +28,32 @@ import com.example.app.service.TicketService;
 public class PresentationsServlet extends HttpServlet {
     private PresentationService presentationService;
 	private TicketService ticketService;
+	private PeopleService peopleService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         presentationService = (PresentationService) config.getServletContext()
             .getAttribute("presentationService");
-		ticketService = (TicketService) config.getServletContext().getAttribute("ticketService");
-    }
+		ticketService = (TicketService) config.getServletContext()
+			.getAttribute("ticketService");
+    	peopleService = (PeopleService) config.getServletContext()
+			.getAttribute("peopleService");
+	}
 
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
+		Long userId = (Long) request.getSession().getAttribute("id");
+
+		if (userId != null) {
+			Person person = peopleService.findById(userId);
+			request.setAttribute("person", person);
+
+			if (person.getRole().equals(Role.ADMIN)) {
+				request.setAttribute("isAdmin", true);
+			}
+		}
+
         Long id = Long.valueOf(request.getParameter("id"));
 		String rowParameter = request.getParameter("row");
 		Integer row;
@@ -50,8 +68,8 @@ public class PresentationsServlet extends HttpServlet {
 
         request.setAttribute("presentation", presentationService.findById(id));
 		request.setAttribute("tickets", tickets);
-		request.setAttribute("nextRow", ++row);
-		request.setAttribute("prevRow", --row);
+		request.setAttribute("nextRow", row + 1);
+		request.setAttribute("prevRow", row - 1);
 
         request.getServletContext()
             .getRequestDispatcher("/WEB-INF/views/presentation.jsp")
@@ -61,15 +79,6 @@ public class PresentationsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
-		String method = request.getParameter("method").toLowerCase();
-		if (Objects.equals("delete", method)) {
-			doDelete(request, response);
-			return;
-		} else if (Objects.equals("put", method)) {
-			doPut(request, response);
-			return;
-		}
-
 		Long concertId = Long.valueOf(request.getParameter("concertId"));
 		Timestamp presentationTime = Timestamp.valueOf(request.getParameter("presentationTime"));
 
@@ -79,7 +88,7 @@ public class PresentationsServlet extends HttpServlet {
 			.build();
 
 		presentationService.save(presentation);
-		response.sendRedirect(request.getContextPath() + "presentations?id="
+		response.sendRedirect(request.getContextPath() + "/presentation?id="
 							  + presentation.getId());
 	}
 
