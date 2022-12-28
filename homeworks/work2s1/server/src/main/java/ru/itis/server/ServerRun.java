@@ -1,13 +1,12 @@
-package ru.itis;
+package ru.itis.server;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.time.LocalDateTime;
 
 import ru.itis.protocol.Message;
-import ru.itis.protocol.MessageFabric;
-import ru.itis.server.Server;
-
+import ru.itis.protocol.MessageManager;
 /**
  * @author Vitaly Chekushkin
  */
@@ -19,8 +18,13 @@ public class ServerRun {
 
 		Socket clientSocket = server.getClientServerById(1);
 		System.out.println("got client");
-		Message<LocalDateTime> message = MessageFabric.readMessage(clientSocket.getInputStream());
+		Message<LocalDateTime> message = MessageManager.readMessage(clientSocket.getInputStream());
 		System.out.println("got message " + message);
-		MessageFabric.sendMessage(message, clientSocket.getOutputStream());
+
+		byte[] convertedMessage = MessageManager.convertMessage(message);
+		OutputStream os = clientSocket.getOutputStream();
+		os.write(convertedMessage);
+		os.flush();
+		System.out.println("sent message to client");
 	}
 }

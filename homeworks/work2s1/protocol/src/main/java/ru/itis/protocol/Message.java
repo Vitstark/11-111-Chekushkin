@@ -2,11 +2,17 @@ package ru.itis.protocol;
 
 import java.io.Serializable;
 
+import ru.itis.protocol.config.Type;
+
 /**
  * @author Vitaly Chekushkin
  */
 public class Message<T extends Serializable> {
-	Message(T value, Type type) {
+	public static <T extends Serializable> Message<T> newMessage(Type type, T value) {
+		return new Message<>(value, type);
+	}
+
+	private Message(T value, Type type) {
 		this.value = value;
 		this.type = type;
 	}
