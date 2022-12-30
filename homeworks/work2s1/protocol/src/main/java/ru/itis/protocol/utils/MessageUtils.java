@@ -6,11 +6,13 @@ package ru.itis.protocol.utils;
 public class MessageUtils {
 	public static final String versionToString(byte[] version) {
 		StringBuilder versionBuilder = new StringBuilder();
-		versionBuilder.append(version[0]);
+		versionBuilder.append('"')
+				.append(version[0]);
 		for (int i = 1; i < version.length; i++) {
-			versionBuilder.append('.');
-			versionBuilder.append(version[i]);
+			versionBuilder.append('.')
+					.append(version[i]);
 		}
-		return versionBuilder.toString();
+		return versionBuilder.append('"')
+			.toString();
 	}
 }
