@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HtmlSourcesReplacer {
-    private static final String urlPattern = "(https|http)://[A-Za-z\\.]+\\.(ru|net|ua|com)\\S*\\.%s(\\?(\\S)*)?";
+    private static final String urlPattern = "(https|http)://[A-Za-z\\.]+\\.(ru|net|ua|com)\\S*\\.%s(\\?(^\")*)?";
 
     private final Path htmlPath;
 
@@ -30,6 +32,8 @@ public class HtmlSourcesReplacer {
 
         Pattern pattern = Pattern.compile(String.format(urlPattern, suffix));
         Matcher matcher = pattern.matcher(html);
+        ExecutorService executorService = Executors.newFixedThreadPool(
+            Runtime.getRuntime().availableProcessors());
 
         String changedHtml = matcher.replaceAll((matchResult) -> {
             String url = matchResult.group();
@@ -37,9 +41,11 @@ public class HtmlSourcesReplacer {
             // url = url.substring(1, url.length() - 1);
             String imageName = new NameGeneratorFromImageUrl().generateImageName(url);
             FileLoader fileLoader = new FileLoader(targetDir, imageName);
-            fileLoader.loadToFile(url);
+            executorService.submit(() -> fileLoader.loadToFile(url));
             return Path.of(suffix, imageName).toString();
         });
+
+        executorService.shutdown();
 
         return changedHtml;
     }
