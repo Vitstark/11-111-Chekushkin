@@ -21,7 +21,8 @@ public class MessageManager {
 		byte[] messageVersion = byteBuffer.array();
 		if (!Arrays.equals(VERSION, messageVersion)) {
 			throw new ProtocolException("Message version should be " +
-				MessageUtils.versionToString(VERSION) + ".");
+				MessageUtils.versionToString(VERSION) + ", your version: " +
+				MessageUtils.versionToString(messageVersion));
 		}
 
 		Type type;
