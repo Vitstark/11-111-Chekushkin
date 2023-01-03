@@ -76,6 +76,7 @@ public class Server {
 					throw new RuntimeException(e);
 				}
 			}
+			System.out.println("Client disconnected from server");
 		});
 		thread.start();
 	}
