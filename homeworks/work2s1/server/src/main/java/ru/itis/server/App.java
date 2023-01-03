@@ -15,8 +15,9 @@ import ru.itis.server.configuration.ServerConfiguration;
  *
  */
 public class App {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Socket socket = new Socket(InetAddress.getLocalHost().getHostAddress(), ServerConfiguration.PORT);
+        Thread.sleep(2000);
         Message<LocalDateTime> message = Message.newMessage(Type.ALL, LocalDateTime.now());
         System.out.println(message);
 
@@ -27,5 +28,20 @@ public class App {
 
         System.out.println("sent message to server");
         System.out.println(MessageManager.readMessage(socket.getInputStream()));
+
+        for (int i = 0; i < 5; i++) {
+            Thread.sleep(1000);
+
+            message = Message.newMessage(Type.ALL, LocalDateTime.now());
+            System.out.println(message);
+
+            convertedMessage = MessageManager.convertMessage(message);
+            os = socket.getOutputStream();
+            os.write(convertedMessage);
+            os.flush();
+
+            System.out.println("sent message to server");
+            System.out.println(MessageManager.readMessage(socket.getInputStream()));
+        }
     }
 }
