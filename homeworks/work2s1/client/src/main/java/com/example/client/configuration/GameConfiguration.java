@@ -10,5 +10,5 @@ public class GameConfiguration {
 	public static final int TANK_SIZE = BLOCK_SIZE * 3;
 	public static final double TANK_SPEED = BLOCK_SIZE * 2;
 	public static final double BULLET_SPEED = BLOCK_SIZE * 8;
-	public static final Duration FIRE_DELAY = Duration.millis(500);
+	public static final Duration FIRE_DELAY = Duration.millis(100);
 }

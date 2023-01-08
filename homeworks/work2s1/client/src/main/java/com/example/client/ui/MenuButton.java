@@ -22,7 +22,10 @@ public class MenuButton extends Parent {
 				.otherwise(Color.WHITE)
 		);
 
-		setOnMouseClicked(e -> action.run());
+		setOnMouseClicked(e -> {
+			FXGL.play("click.wav");
+			action.run();
+		});
 
 		textButton.setTextAlignment(TextAlignment.CENTER);
 		setPickOnBounds(true);

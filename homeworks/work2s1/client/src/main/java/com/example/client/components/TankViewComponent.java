@@ -123,8 +123,6 @@ public class TankViewComponent extends Component {
         double y = entity.getCenter().getY();
         Point2D direction = angleToVector();
 
-        System.out.println(direction);
-
         return new Point2D(x - direction.getY() * offset, y - direction.getX() * offset);
     }
 
