@@ -19,7 +19,7 @@ public class Server {
 	private static AtomicInteger atomicInteger = new AtomicInteger(0);
 
 	private ServerSocket serverSocket;
-	private Map<Object, Socket> clients;
+	private Map<String, Socket> clients;
 
 	public Server() {
 		try {
@@ -40,7 +40,7 @@ public class Server {
 					System.out.println("Client with id = " + id + " connected to the server");
 
 					addSocketListener(socket);
-					clients.put(id, socket);
+					clients.put("Player" + id, socket);
 				}
 				catch (IOException e) {
 					throw new RuntimeException(e);
