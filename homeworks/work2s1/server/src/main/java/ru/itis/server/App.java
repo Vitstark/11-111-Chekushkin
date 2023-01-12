@@ -41,7 +41,8 @@ public class App {
             os.flush();
 
             System.out.println("sent message to server");
-            System.out.println(MessageManager.readMessage(socket.getInputStream()));
         }
+
+        socket.close();
     }
 }
