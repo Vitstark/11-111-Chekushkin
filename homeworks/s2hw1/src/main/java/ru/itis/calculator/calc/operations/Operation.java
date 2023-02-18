@@ -1,9 +1,9 @@
-package ru.itis.calculator.operations;
+package ru.itis.calculator.calc.operations;
 
 /**
  * @author Vitaly Chekushkin
  */
 public interface Operation {
-  Number apply(Number number1, Number number2);
+  Double apply(Double number1, Double number2);
   String getOperator();
 }
