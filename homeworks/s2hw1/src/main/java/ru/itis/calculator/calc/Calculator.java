@@ -5,12 +5,15 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
 import ru.itis.calculator.calc.exceptions.InvalidFormatException;
 import ru.itis.calculator.calc.operations.Operation;
 
 /**
  * @author Vitaly Chekushkin
  */
+
+@Component
 public class Calculator {
   private final Map<String, Operation> operations;
   public Calculator(Operation ... operations) {
@@ -19,18 +22,12 @@ public class Calculator {
             Operation::getOperator, operation -> operation));
   }
 
-  public Double calculate(String expression) {
+  public Double calculate(Double a, Double b, String op) {
     try {
-      String[] substrings = expression.split(" +");
-      Double number1 = Double.parseDouble(substrings[0]);
-      Double number2 = Double.parseDouble(substrings[1]);
-      Operation operation = operations.get(substrings[2]);
-
-      return operation.apply(number1, number2);
+      Operation operation = operations.get(op);
+      return operation.apply(a, b);
     } catch (NullPointerException e) {
       throw new UnsupportedOperationException("This operator is not support", e);
-    } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-      throw new InvalidFormatException("Invalid format of expression", e);
     }
   }
 

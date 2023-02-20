@@ -12,8 +12,10 @@ import ru.itis.calculator.calc.Calculator;
  */
 public class App {
     public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext("ru.itis.calculator.config");
-        Calculator calculator = context.getBean(Calculator.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(
+            "ru.itis.calculator");
+        StringExpressionCalculatorAdapter calculator = context.getBean(
+            StringExpressionCalculatorAdapter.class);
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
